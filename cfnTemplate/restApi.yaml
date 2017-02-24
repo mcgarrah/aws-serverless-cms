@@ -1,0 +1,120 @@
+Resources:
+   CMSApi:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Body: 
+        swagger: "2.0"
+        info:
+          version: "2017-02-24T05:53:34Z"
+          title: "my-cms-aws-cms-Operations"
+        host: "tudp9nesv0.execute-api.ap-southeast-1.amazonaws.com"
+        basePath: "/prod"
+        schemes:
+        - "https"
+        paths:
+          /:
+            post:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              parameters:
+              - name: "Cookie"
+                in: "header"
+                required: false
+                type: "string"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Credentials:
+                      type: "string"
+                    Set-Cookie:
+                      type: "string"
+                "400":
+                  description: "400 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Credentials:
+                      type: "string"
+              x-amazon-apigateway-integration:
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Set-Cookie: "integration.response.body.Set-Cookie"
+                      method.response.header.Access-Control-Allow-Credentials: "'true'"
+                      method.response.header.Access-Control-Allow-Origin: "'https://s3.amazonaws.com'"
+                    responseTemplates:
+                      application/json: "$input.body"
+                  '.*"status": 400.*':
+                    statusCode: "400"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Credentials: "'true'"
+                      method.response.header.Access-Control-Allow-Origin: "'https://s3.amazonaws.com'"
+                    responseTemplates:
+                      application/json: "$input.path('$.errorMessage')"
+                requestTemplates:
+                  application/json: "#if($input.params(\"Cookie\") && $input.params(\"Cookie\"\
+                    ) != \"\") {\"body\": $input.body, \"token\": \"$input.params(\"Cookie\"\
+                    )\"}#else{\"body\": $input.body}#end"
+                uri: "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-1:216184389560:function:my-cms-aws-cms-Controller/invocations"
+                passthroughBehavior: "never"
+                httpMethod: "POST"
+                type: "aws"
+            options:
+              consumes:
+              - "application/json"
+              produces:
+              - "application/json"
+              responses:
+                "200":
+                  description: "200 response"
+                  schema:
+                    $ref: "#/definitions/Empty"
+                  headers:
+                    Access-Control-Allow-Origin:
+                      type: "string"
+                    Access-Control-Allow-Methods:
+                      type: "string"
+                    Access-Control-Allow-Credentials:
+                      type: "string"
+                    Access-Control-Allow-Headers:
+                      type: "string"
+              x-amazon-apigateway-integration:
+                responses:
+                  default:
+                    statusCode: "200"
+                    responseParameters:
+                      method.response.header.Access-Control-Allow-Credentials: "'true'"
+                      method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+                      method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'"
+                      method.response.header.Access-Control-Allow-Origin: "'https://s3.amazonaws.com'"
+                requestTemplates:
+                  application/json: "{\"statusCode\": 200}"
+                passthroughBehavior: "when_no_match"
+                type: "mock"
+        definitions:
+          Empty:
+            type: "object"
+            title: "Empty Schema"
+      Description: "test Api"
+      Name: "CMS-opeartion-api"  
+   APIResource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      ParentId: 
+        Fn::GetAtt: 
+          - "CMSApi"
+          - "RootResourceId"
+      PathPart: "testPath"
+      RestApiId: 
+        Ref: 
+          "CMSApi"
