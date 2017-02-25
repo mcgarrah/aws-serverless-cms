@@ -14,25 +14,39 @@ Resources:
         - "RootResourceId"
      HttpMethod: "POST"
      RequestParameters:
-      method.request.header.Cookie: False
+       method.request.header.Cookie: False
      AuthorizationType: "NONE"
      Integration: 
        Type: "MOCK"
        IntegrationResponses: 
           - ResponseParameters:
-             method.response.header.Set-Cookie: "integration.response.body.Set-Cookie"
-             method.response.header.Access-Control-Allow-Credentials: "true"
-             method.response.header.Access-Control-Allow-Origin: "'https://s3.amazonaws.com'"
+              method.response.header.Set-Cookie: "integration.response.body.Set-Cookie"
+              method.response.header.Access-Control-Allow-Credentials: "'true'"
+#              method.response.header.Access-Control-Allow-Origin:
+#                !Sub | 
+#                  - "'https://s3-${AWS::Region}.amazonaws.com'"             
             ResponseTemplates:
               application/json: "$input.body"
+            StatusCode: "200"
+          - ResponseParameters:
+              method.response.header.Set-Cookie: "integration.response.body.Set-Cookie"
+              method.response.header.Access-Control-Allow-Credentials: "'true'"
+#              method.response.header.Access-Control-Allow-Origin:
+#                !Sub | 
+#                  - "'https://s3-${AWS::Region}.amazonaws.com'"             
+            ResponseTemplates:
+              application/json: "$input.path('$.errorMessage')"
+            SelectionPattern: ".*'status': 400.*"
+            StatusCode: "400"            
+              
 #       PassthroughBehavior: "NEVER"
 #       IntegrationHttpMethod: "POST"
 #       Uri: 
 #        !Sub | 
 #          - arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${!lambdaFunctionArn}/invocations
 #          - {lambdaFunctionArn: arn:aws:lambda:ap-southeast-1:216184389560:function:my-cms-aws-cms-Controller}
-#       RequestTemplates:
-#         "application/json": "{#if($input.params('Cookie') && $input.params('Cookie') != '') {'body': $input.body, 'token': '$input.params('Cookie')'}#else{'body': $input.body}#end}"
+       RequestTemplates:
+         "application/json": "{'statusCode': 200}"
      MethodResponses:
        - ResponseModels:
            application/json: Empty
@@ -41,6 +55,47 @@ Resources:
            method.response.header.Access-Control-Allow-Credentials: False
            method.response.header.Access-Control-Allow-Origin: False
          StatusCode: "200"
+       - ResponseModels:
+           application/json: Empty
+         ResponseParameters:
+           method.response.header.Access-Control-Allow-Credentials: False
+           method.response.header.Access-Control-Allow-Origin: False
+         StatusCode: "400"
+   OptionsMethod: 
+    Type: "AWS::ApiGateway::Method"
+    Properties: 
+     RestApiId: !Ref CMSApi
+     ResourceId: 
+       Fn::GetAtt: 
+        - "CMSApi"
+        - "RootResourceId"
+     HttpMethod: "OPTIONS"
+     AuthorizationType: "NONE"
+     Integration: 
+       Type: "MOCK"
+       IntegrationResponses: 
+          - ResponseParameters:
+#              method.response.header.Access-Control-Allow-Headers: 
+#                "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
+              method.response.header.Access-Control-Allow-Credentials: "'true'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+#              method.response.header.Access-Control-Allow-Origin:
+#                !Sub | 
+#                  - "'https://s3-${AWS::Region}.amazonaws.com'"             
+            ResponseTemplates:
+              application/json: ""
+            StatusCode: "200"
+       RequestTemplates:
+         "application/json": "{'statusCode': 200}"        
+     MethodResponses:
+       - ResponseModels:
+           application/json: Empty
+         ResponseParameters:
+           method.response.header.Set-Cookie: False
+           method.response.header.Access-Control-Allow-Credentials: False
+           method.response.header.Access-Control-Allow-Origin: False
+           method.response.header.Access-Control-Allow-Methods: False
+         StatusCode: "200"        
           
 Outputs:
    ApiId:
