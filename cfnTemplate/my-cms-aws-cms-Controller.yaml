@@ -1,0 +1,16 @@
+﻿AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Aws cms central management function designed to handle any API Gateway request
+Resources:
+  mycmsawscmsController:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: controller.handler
+      Runtime: python2.7
+      CodeUri: .
+      Description: >-
+        Aws cms central management function designed to handle any API Gateway
+        request
+      MemorySize: 512
+      Timeout: 10
+      Role: 'arn:aws:iam::216184389560:role/my-cms-aws-cms-Lambda'
