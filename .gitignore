@@ -2,3 +2,7 @@
 test.py
 *-constants.json
 installed.json
+/*.project
+/.settings/*.jsdtscope
+/.settings/*.container
+/.settings/*.name

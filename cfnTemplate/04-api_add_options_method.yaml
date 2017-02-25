@@ -20,7 +20,7 @@ Resources:
 #              method.response.header.Access-Control-Allow-Origin:
 #                !Sub | 
 #                  - "'https://s3-${AWS::Region}.amazonaws.com'"             
-            ResponseTemplates:
+       ResponseTemplates:
               application/json: ""
             StatusCode: "200"
        RequestTemplates:

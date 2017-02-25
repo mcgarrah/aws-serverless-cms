@@ -1,0 +1,26 @@
+Resources:
+  CmsApiStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CmsApiStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/01-create_rest_api.yaml
+  CmsLambdaStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CmsLambdaStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/02-create_lambda_function.yaml
+    DependsOn:
+      - CmsApiStack  
+  ApiMethodStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: ApiMethodStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/03-api_add_post_method.yaml
+    DependsOn:
+    - CmsLambdaStack

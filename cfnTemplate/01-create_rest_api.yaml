@@ -1,0 +1,31 @@
+Resources:
+   CMSApi:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Description: "CMSApi for CMS"
+      Name: "CMS-opeartion-api"
+Outputs:
+   ApiId:
+     Description: API ID
+     Value: !Ref CMSApi
+     Export:
+       Name: ApiId
+   RootResourceId:
+     Description: Root Resource Id
+     Value: !GetAtt CMSApi.RootResourceId
+     Export:
+       Name: RootResourceId
+   ApiUrl:
+     Description: API Url
+     Value: 
+       !Sub  "https://${CMSApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+     Export:
+       Name: ApiUrl
+   ApiPermissionsUri:
+     Description: API Permissions Uri
+     Value: 
+       !Sub  "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${CMSApi}/*/POST/"
+     Export:
+       Name: ApiPermissionsUri
+    
+      
