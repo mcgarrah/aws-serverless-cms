@@ -1,0 +1,14 @@
+Resources:   
+  CmsApiDeployment:  
+    Type: "AWS::ApiGateway::Deployment"
+    Properties:
+      Description: "CMS Api"
+      RestApiId: !ImportValue ApiId
+      StageName: "prod"
+  CmsLambdaPermisson:
+    Type: "AWS::Lambda::Permission"
+    Properties: 
+      Action: "lambda:InvokeFunction"
+      FunctionName: !ImportValue LambdaFunctionName
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !ImportValue ApiPermissionUri
