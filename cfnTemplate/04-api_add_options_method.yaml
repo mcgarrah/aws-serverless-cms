@@ -8,19 +8,18 @@ Resources:
      AuthorizationType: "NONE"
      Integration: 
        Type: "MOCK"
+       RequestTemplates:
+         "application/json": "{'statusCode': 200}"
        IntegrationResponses: 
           - ResponseParameters:
-              method.response.header.Access-Control-Allow-Headers: 
-                "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
               method.response.header.Access-Control-Allow-Credentials: "'true'"
               method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
               method.response.header.Access-Control-Allow-Origin:
                !Sub "'https://s3-${AWS::Region}.amazonaws.com'"             
             ResponseTemplates:
               application/json: ""
-            StatusCode: "200"
-       RequestTemplates:
-         "application/json": "{'statusCode': 200}"        
+            StatusCode: "200"        
      MethodResponses:
        - ResponseModels:
            application/json: Empty
@@ -29,4 +28,5 @@ Resources:
            method.response.header.Access-Control-Allow-Credentials: False
            method.response.header.Access-Control-Allow-Origin: False
            method.response.header.Access-Control-Allow-Methods: False
+           method.response.header.Access-Control-Allow-Headers: False
          StatusCode: "200"  
