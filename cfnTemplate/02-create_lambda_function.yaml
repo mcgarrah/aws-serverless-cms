@@ -52,10 +52,10 @@ Outputs:
      Value: !Sub  "'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CmsLambda.Arn}/invocations'"
      Export:
        Name: ApiInvocationUri
-  ApiPermissionUri:
-    Description: Cms Api Permission Uri
-    Value: !Sub 
+   ApiPermissionUri:
+     Description: Cms Api Permission Uri
+     Value: !Sub 
       - "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiId}/*/POST/" #TO TEST
       - {ApiId: !ImportValue ApiId}
-    Export:
-      Name: ApiPermissionUri
+     Export:
+       Name: ApiPermissionUri

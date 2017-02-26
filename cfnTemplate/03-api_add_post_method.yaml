@@ -12,9 +12,9 @@ Resources:
              Type: "AWS"
              PassthroughBehavior: "NEVER"
              IntegrationHttpMethod: "POST"
-             Uri: 
-               Fn::ImportValue:
-                  !Sub  "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CmsLambdaArn}/invocations"
+             Uri: !Sub  
+                - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CmsLambdaArn}/invocations"
+                - {CmsLambdaArn: !ImportValue CmsLambdaArn}
              RequestTemplates:
                "application/json": "{'application/json': '#if($input.params('Cookie') && $input.params('Cookie') != '') {'body': $input.body, 'token': '$input.params('Cookie')'}#else{'body': $input.body}#end'}"
              
@@ -49,34 +49,4 @@ Resources:
                     method.response.header.Access-Control-Allow-Credentials: False
                     method.response.header.Access-Control-Allow-Origin: False
                   StatusCode: "400"
-   OptionsMethod:
-       Type: "AWS::ApiGateway::Method"
-       Properties: 
-          RestApiId: !ImportValue ApiId
-          ResourceId: !ImportValue RootResourceId      
-          HttpMethod: "OPTIONS"
-          AuthorizationType: "NONE"
-          Integration: 
-             Type: "MOCK"
-             IntegrationResponses: 
-                 - ResponseParameters:
-                       method.response.header.Access-Control-Allow-Headers: 
-                            "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
-                       method.response.header.Access-Control-Allow-Credentials: "'true'"
-                       method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-                       method.response.header.Access-Control-Allow-Origin:
-                           !Sub  "'https://s3-${AWS::Region}.amazonaws.com'"             
-                   ResponseTemplates:
-                       application/json: ""
-                   StatusCode: "200"
-                   RequestTemplates:
-                       "application/json": "{'statusCode': 200}"        
-          MethodResponses:
-            - ResponseModels:
-                  application/json: Empty
-              ResponseParameters:
-                method.response.header.Set-Cookie: False
-                method.response.header.Access-Control-Allow-Credentials: False
-                method.response.header.Access-Control-Allow-Origin: False
-                method.response.header.Access-Control-Allow-Methods: False
-              StatusCode: "200"       
+   

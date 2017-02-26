@@ -2,25 +2,21 @@ Resources:
    OptionsMethod: 
     Type: "AWS::ApiGateway::Method"
     Properties: 
-     RestApiId: !Ref CMSApi
-     ResourceId: 
-       Fn::GetAtt: 
-        - "CMSApi"
-        - "RootResourceId"
+     RestApiId: !ImportValue ApiId
+     ResourceId: !ImportValue RootResourceId
      HttpMethod: "OPTIONS"
      AuthorizationType: "NONE"
      Integration: 
        Type: "MOCK"
        IntegrationResponses: 
           - ResponseParameters:
-#              method.response.header.Access-Control-Allow-Headers: 
-#                "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
+              method.response.header.Access-Control-Allow-Headers: 
+                "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,Cookie,Accept,Access-Control-Allow-Origin'" 
               method.response.header.Access-Control-Allow-Credentials: "'true'"
               method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
-#              method.response.header.Access-Control-Allow-Origin:
-#                !Sub | 
-#                  - "'https://s3-${AWS::Region}.amazonaws.com'"             
-       ResponseTemplates:
+              method.response.header.Access-Control-Allow-Origin:
+               !Sub "'https://s3-${AWS::Region}.amazonaws.com'"             
+            ResponseTemplates:
               application/json: ""
             StatusCode: "200"
        RequestTemplates:
