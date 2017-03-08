@@ -1,0 +1,14 @@
+Resources:   
+  BlogTable:  
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+          AttributeDefinitions:
+            - AttributeName: "PageName"
+              AttributeType: "S"
+          KeySchema:
+            - AttributeName: "PageName"
+              KeyType: "HASH"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          TableName: "PageTable"

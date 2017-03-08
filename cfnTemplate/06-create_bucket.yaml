@@ -1,0 +1,24 @@
+Resources:   
+  CmsBucket:  
+    Type: "AWS::S3::Bucket"
+    Properties: 
+      AccessControl: "PublicRead"
+      BucketName: !Sub "cms-website-${AWS::AccountId}"
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "Authorization"
+              - "Cache-Control"
+              - "Upgrade-Insecure-Requests"
+            AllowedMethods:
+              - "GET"
+              - "POST"
+            AllowedOrigins:
+              - "*"
+            MaxAge: 3000
+Outputs:
+   CmsBucketName:
+     Description: Cms Bucket Name
+     Value: !Ref CmsBucket
+     Export:
+       Name: CmsBucketName

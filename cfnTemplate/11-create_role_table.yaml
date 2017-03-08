@@ -1,0 +1,14 @@
+Resources:   
+  BlogTable:  
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+          AttributeDefinitions:
+            - AttributeName: "RoleName"
+              AttributeType: "S"
+          KeySchema:
+            - AttributeName: "RoleName"
+              KeyType: "HASH"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          TableName: "RoleTable"

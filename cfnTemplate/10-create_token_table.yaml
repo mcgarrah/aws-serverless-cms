@@ -1,0 +1,14 @@
+Resources:   
+  BlogTable:  
+        Type: "AWS::DynamoDB::Table"
+        Properties:
+          AttributeDefinitions:
+            - AttributeName: "Token"
+              AttributeType: "S"
+          KeySchema:
+            - AttributeName: "Token"
+              KeyType: "HASH"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+          TableName: "TokenTable"

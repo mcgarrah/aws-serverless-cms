@@ -43,3 +43,54 @@ Resources:
     DependsOn:
       - ApiPostMethodStack
       - ApiOptionsMethodStack
+  CreateBucketStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateBucketStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/06-create_bucket.yaml
+  CreateCDNStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateCDNStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/07-create_cloudfront_distribution.yaml
+    DependsOn:
+      - CreateBucketStack
+  CreateBlogTableStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateBlogTableStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/08-create_blog_table.yaml
+  CreatePageTableStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreatePageTableStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/09-create_page_table.yaml
+  CreateTokenTableStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateTokenTableStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/10-create_token_table.yaml
+  CreateRoleTableStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateRoleTableStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/11-create_role_table.yaml
+  CreateUserTableStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      Tags:
+      - Key: CMS
+        Value: CreateUserTableStack
+      TemplateURL: https://s3-ap-southeast-1.amazonaws.com/gabriel-serverless-cms/templates/12-create_user_table.yaml

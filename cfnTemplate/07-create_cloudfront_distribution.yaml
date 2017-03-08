@@ -1,0 +1,32 @@
+Resources:   
+  CDNStack:  
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Comment: 
+          !Sub  
+           - "Distribution of ${CmsBucketName}.s3-${AWS::Region}.amazonaws.com"
+           - {CmsBucketName: !ImportValue CmsBucketName}
+        DefaultCacheBehavior:
+            AllowedMethods:
+              - "GET"
+              - "HEAD"
+            DefaultTTL: 86400
+            ForwardedValues:
+                Cookies:
+                    Forward: "none"
+                QueryString: False
+            MaxTTL: 2628000
+            MinTTL: 0
+            TargetOriginId: "RandomUUID"
+            ViewerProtocolPolicy : "redirect-to-https"
+        DefaultRootObject: "index.html"
+        Enabled: True
+        Origins:
+            - DomainName: 
+                  !Sub  
+                   - "${CmsBucketName}.s3.amazonaws.com"
+                   - {CmsBucketName: !ImportValue CmsBucketName}
+              Id: "RandomUUID"
+              S3OriginConfig:
+                OriginAccessIdentity: ""
