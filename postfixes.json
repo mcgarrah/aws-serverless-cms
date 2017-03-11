@@ -1,4 +1,5 @@
 {
+    "TemplateBucket":"-aws-cms-template",
     "BUCKET": "-aws-cms",
     "REST_API": "-aws-cms-Operations",
     "LAMBDA_FUNCTION": "-aws-cms-Controller",

@@ -12,23 +12,60 @@ import cms_functions
 import sys
 import os
 import cms_utils
+import yaml
 
 regions = cms_utils.CmsUtils.getAvailableRegions()
 
 for region in regions:
     print region
 
-selectedRegion = raw_input('select a region to deploy cms: ')
-cms_name = raw_input('input name of your cms: ')
+selectedRegion = ''
+while not selectedRegion.strip():
+    selectedRegion = raw_input('select a region to deploy cms: ')
+    if selectedRegion.strip():
+        print 'region is ', selectedRegion
+        break
+
+cms_name = ''
+while not cms_name.strip():
+    cms_name = raw_input('input name of your cms: ')
+    if cms_name.strip():
+        print 'cms name is ', cms_name
+        break
 
 if selectedRegion not in regions:
     print selectedRegion, \
         ' is not available, choose default region us-east-1'
     selectedRegion = 'us-east-1'
 
-print selectedRegion, ' is selected and cms with name = ', cms_name
+template_bucket = ''
+while not template_bucket.strip():
+    template_bucket = \
+        raw_input('input name of your cfn template bucket: ')
+    if template_bucket.strip():
+        print 'cfn template bucket is ', template_bucket
+        break
 
-cms = cms_functions.AwsFunc(cms_name, region=selectedRegion)
+# TODO pass the static_website_bucket to cloudformation
+
+static_website_bucket = ''
+while not static_website_bucket.strip():
+    static_website_bucket = \
+        raw_input('input name of your static website bucket: ')
+    if static_website_bucket.strip():
+        print 'static website bucket is ', static_website_bucket
+        break
+
+result = {}
+result['selectedRegion'] = selectedRegion
+result['cms_name'] = cms_name
+result['template_bucket'] = template_bucket
+result['static_website_bucket'] = static_website_bucket
+
+with open('data.yml', 'w') as outfile:
+    yaml.dump(result, outfile, default_flow_style=False)
+
+os.system('pause')
 
 # Create tje rest api
 

@@ -23,5 +23,7 @@ class CmsUtils:
         regions = [region['RegionName'] for region in
                    client.describe_regions()['Regions']]
         return regions
-
+    
+    def uploadFiles():
+        
 
