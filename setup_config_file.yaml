@@ -1,0 +1,5 @@
+cms_name: mycms
+lambda_bucket: mylambdas
+selectedRegion: us-east-1
+static_website_bucket: mywebsite
+template_bucket: mytemplate
