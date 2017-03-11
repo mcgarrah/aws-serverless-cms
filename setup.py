@@ -27,15 +27,20 @@ util = cms_utils.CmsUtils(config)
 
 # create buckets
 
-util.createBucket(config['lambda_bucket'])
-util.createBucket(config['static_website_bucket'])
-util.createBucket(config['template_bucket'])
+with open('cfnTemplate/init-template-bucket.yaml', 'r') as templateBody:
+    templateBody = templateBody.read()
+    util.createBucket(config['template_bucket'], templateBody)
+
+# util.createBucket(config['lambda_bucket'],
+#                  'cfnTemplate/init-template-bucket.yaml')
+# util.createBucket(config['static_website_bucket'])
 
 # upload files from current directory
+#
+# util.uploadWebsite('.' + os.sep + 'website' + os.sep)
+# util.uploadCfnTemplate('.' + os.sep + 'cfnTemplate' + os.sep)
+# util.uploadLambda('.' + os.sep + 'lambda' + os.sep)
 
-util.uploadWebsite('.' + os.sep + 'website' + os.sep)
-util.uploadCfnTemplate('.' + os.sep + 'cfnTemplate' + os.sep)
-util.uploadLambda('.' + os.sep + 'lambda' + os.sep)
 os.system('pause')
 
 # Create tje rest api

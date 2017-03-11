@@ -1,0 +1,9 @@
+Resources:   
+  TemplateBucket:  
+    Type: "AWS::S3::Bucket"
+Outputs:
+   TemplateBucket:
+     Description: Template Bucket Name
+     Value: !Ref TemplateBucket
+     Export:
+       Name: TemplateBucketName

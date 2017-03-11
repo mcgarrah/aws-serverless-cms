@@ -29,36 +29,27 @@ class CmsUtils:
                    client.describe_regions()['Regions']]
         return regions
 
-    def createBucket(self, bucketname):
+    def createBucket(self, bucketname, templateBody):
+        stackName = bucketname + '-Stack'
         try:
-            bucketLocation = ''
-            bucketLocationOptions = [
-                'us-west-1',
-                'us-west-2',
-                'ca-central-1',
-                'eu-west-1',
-                'eu-west-2',
-                'eu-central-1',
-                'ap-south-1',
-                'ap-southeast-1',
-                'ap-southeast-2',
-                'ap-northeast-1',
-                'ap-northeast-2',
-                'sa-east-1',
-                'us-east-2',
-                ]
-            if self.constants['selectedRegion'] \
-                not in bucketLocationOptions:
-                bucketLocation = 'us-east-2'
-            else:
-                bucketLocation = self.constants['selectedRegion']
-            response = boto3.resource('s3'
-                    ).create_bucket(ACL='public-read',
-                                    Bucket=bucketname,
-                                    CreateBucketConfiguration={'LocationConstraint': bucketLocation})
+            client = boto3.client('cloudformation')
 
+            response = client.create_stack(StackName=stackName,
+                    TemplateBody=templateBody)
+            print 'stack created'
+            print response
+
+#            waiters = client.waiter_names
+#            print waiters
+
+            waiter = client.get_waiter('stack_create_complete')
+            waiter.wait(StackName=stackName)
+
+            response = client.describe_stacks(StackName=stackName)
+            print 'describe stack'
             print response
         except botocore.exceptions.ClientError, e:
+
             print e
             sys.exit()
 
