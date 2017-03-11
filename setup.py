@@ -59,12 +59,12 @@ cms = cms_functions.AwsFunc(cms_name, region=selectedRegion)
 ## Create the dunamodb role table
 # cms.create_role_table()
 ## Add an admin role to the role table
-# cms.create_admin_role_db_entry()
+# cms.create_admin_role_db_entry() //todo
 #
 ## Create the dynamodb user table
 # cms.create_user_table()
 ## Add an admin to the user table
-# cms.create_admin_user_db_entry()
+# cms.create_admin_user_db_entry() //todo
 #
 ## Print the default login credentials and the login link
 # cms.print_login_link()

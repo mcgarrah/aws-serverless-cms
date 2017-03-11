@@ -127,6 +127,7 @@ class AwsFunc:
             sys.exit()
 
         # Populate the bucket, adding all files from the website folder
+##TODO upload website folder
 
         print 'Populating bucket'
         for (root, dirs, files) in os.walk('website'):

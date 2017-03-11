@@ -1,5 +1,5 @@
 Resources:   
-  BlogTable:  
+  PageTable:  
         Type: "AWS::DynamoDB::Table"
         Properties:
           AttributeDefinitions:

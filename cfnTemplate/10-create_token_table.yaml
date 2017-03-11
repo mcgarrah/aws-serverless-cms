@@ -1,5 +1,5 @@
 Resources:   
-  BlogTable:  
+  TokenTable:  
         Type: "AWS::DynamoDB::Table"
         Properties:
           AttributeDefinitions:
