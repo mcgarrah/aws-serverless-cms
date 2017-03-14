@@ -38,10 +38,11 @@ class CmsUtils:
             return
         stackName = bucketname + '-Stack'
         try:
-            client = boto3.client('cloudformation')
 
-            # #TODO check if stack exists then skip otherwise create
+            # set all init template folder to be us-east-1, which will be easily used
 
+            client = boto3.client('cloudformation',
+                                  region_name='us-east-1')
             response = client.create_stack(StackName=stackName,
                     TemplateBody=templateBody)
             print 'stack created'
@@ -81,11 +82,52 @@ class CmsUtils:
 
 #        print files
 
+        uploadFolderDict = {}
         for file in files:
             with open(file, 'r') as data:
                 key = file[len(fileDir):len(file)]
                 print file, key
                 s3.meta.client.upload_file(file, bucketname, key)
+                uploadFolderDict[key] = 'https://s3.amazonaws.com/'+
         print fileDir, 'upload completed'
+        return uploadFolderDict
+
+    def uploadTemplateFolder(
+        self,
+        bucketname,
+        fileDir,
+        acl='private',
+        ):
+
+        uploadTemplateFolderDict = self.uploadFolder(bucketname,
+                fileDir, 'private')
+        self.constants['uploadTemplateFolderDict'] = \
+            uploadTemplateFolderDict
+
+        # save template url to constants
+
+        print 'upload template completed'
+
+    def createStackFromLocal(self, templateLocalPath, stackName):
+        if self.constants.has_key(stackName) \
+            and self.constants[stackName] != None:
+            print stackName, ' exists,skipped'
+            return
+        with open(templateLocalPath, 'r') as templateBody:
+            templateBody = templateBody.read()
+            client = boto3.client('cloudformation')
+            response = client.create_stack(StackName=stackName,
+                    TemplateBody=templateBody)
+            print 'stack created'
+
+    def createStackFromS3(self, TemplateS3Url, stackName):
+        if self.constants.has_key(stackName) \
+            and self.constants[stackName] != None:
+            print stackName, ' exists,skipped'
+            return
+        client = boto3.client('cloudformation')
+        response = client.create_stack(StackName=stackName,
+                TemplateURL=TemplateS3Url)
+        print 'stack created'
 
 

@@ -5,14 +5,14 @@ Resources:
       Tags:
       - Key: CMS
         Value: CmsApiStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/01-create_rest_api.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/01-create_rest_api.yaml
   CmsLambdaStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CmsLambdaStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/02-create_lambda_function.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/02-create_lambda_function.yaml
     DependsOn:
       - CmsApiStack  
   ApiPostMethodStack:
@@ -21,7 +21,7 @@ Resources:
       Tags:
       - Key: CMS
         Value: ApiPostMethodStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/03-api_add_post_method.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/03-api_add_post_method.yaml
     DependsOn:
       - CmsLambdaStack
   ApiOptionsMethodStack:
@@ -30,7 +30,7 @@ Resources:
       Tags:
       - Key: CMS
         Value: ApiOptionsMethodStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/04-api_add_options_method.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/04-api_add_options_method.yaml
     DependsOn:
       - CmsLambdaStack
   DeployApiStack:
@@ -39,7 +39,7 @@ Resources:
       Tags:
       - Key: CMS
         Value: DeployApiStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/05-deploy_api.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/05-deploy_api.yaml
     DependsOn:
       - ApiPostMethodStack
       - ApiOptionsMethodStack
@@ -49,14 +49,14 @@ Resources:
       Tags:
       - Key: CMS
         Value: CreateBucketStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/06-create_bucket.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/06-create_bucket.yaml
   CreateCDNStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CreateCDNStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/07-create_cloudfront_distribution.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/07-create_cloudfront_distribution.yaml
     DependsOn:
       - CreateBucketStack
   CreateBlogTableStack:
@@ -65,32 +65,32 @@ Resources:
       Tags:
       - Key: CMS
         Value: CreateBlogTableStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/08-create_blog_table.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/08-create_blog_table.yaml
   CreatePageTableStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CreatePageTableStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/09-create_page_table.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/09-create_page_table.yaml
   CreateTokenTableStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CreateTokenTableStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/10-create_token_table.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/10-create_token_table.yaml
   CreateRoleTableStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CreateRoleTableStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/11-create_role_table.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/11-create_role_table.yaml
   CreateUserTableStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       Tags:
       - Key: CMS
         Value: CreateUserTableStack
-      TemplateURL: https://s3.amazonaws.com/mytemplate-stack-templatebucket-56f72tfu7zux/12-create_user_table.yaml
+      TemplateURL: https://s3.amazonaws.com/{s3-bucketname}/12-create_user_table.yaml

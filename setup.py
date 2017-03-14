@@ -26,24 +26,33 @@ else:
 print config
 util = cms_utils.CmsUtils(config)
 
-# create buckets
+# create bucket for init bucket to store templates
 
-with open('cfnTemplate/init-template-bucket.yaml', 'r') as templateBody:
+with open('initTemplate/init-template-bucket.yaml', 'r') as \
+    templateBody:
     templateBody = templateBody.read()
     util.createBucket(config['template_bucket'], templateBody)
 
-util.uploadFolder(util.constants['TemplateBucket'], '.' + os.sep
-                  + 'cfnTemplate' + os.sep)
+# get top level template and populate it with bucketname
 
-# util.createBucket(config['lambda_bucket'],
-#                  'cfnTemplate/init-template-bucket.yaml')
-# util.createBucket(config['static_website_bucket'])
+topLevelTemplate = ''
+with open('initTemplate/00-top-level-cms.template', 'r') as \
+    topLevelTemplate:
+    topLevelTemplate = topLevelTemplate.read()
+    topLevelTemplate = topLevelTemplate.replace('{s3-bucketname}',
+            util.constants['TemplateBucket'])
+with open('cfnTemplate/00-top-level-cms.yaml', 'w') as startTemplate:
+    startTemplate.write(topLevelTemplate)
 
-# upload files from current directory
-#
-# util.uploadWebsite('.' + os.sep + 'website' + os.sep)
-# util.uploadCfnTemplate('.' + os.sep + 'cfnTemplate' + os.sep)
-# util.uploadLambda('.' + os.sep + 'lambda' + os.sep)
+# upload templates
+
+util.uploadTemplateFolder(util.constants['TemplateBucket'], '.'
+                          + os.sep + 'cfnTemplate' + os.sep)
+
+util.createStackFromS3(util.constants['uploadTemplateFolderDict'
+                       ]['00-top-level-cms.yaml'], 'myCmsStack')
+
+# start building with templates
 
 os.system('pause')
 

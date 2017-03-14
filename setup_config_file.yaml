@@ -1,6 +1,6 @@
-TemplateBucket: mytemplate-stack-templatebucket-kyk94x9f5n9k
+TemplateBucket: mytemplate-stack-templatebucket-56f72tfu7zux
 cms_name: mycms
 lambda_bucket: mylambdas
-selectedRegion: us-east-1
+selectedRegion: ap-southeast-1
 static_website_bucket: mywebsite
 template_bucket: mytemplate
