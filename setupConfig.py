@@ -68,3 +68,10 @@ def setupConfig():
     return config
 
 
+def saveConfig(config):
+    setup_config_file = 'setup_config_file.yaml'
+    with open(setup_config_file, 'w') as outfile:
+        yaml.dump(config, outfile, default_flow_style=False)
+    return config
+
+

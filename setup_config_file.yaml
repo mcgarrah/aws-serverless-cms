@@ -1,3 +1,4 @@
+TemplateBucket: mytemplate-stack-templatebucket-kyk94x9f5n9k
 cms_name: mycms
 lambda_bucket: mylambdas
 selectedRegion: us-east-1

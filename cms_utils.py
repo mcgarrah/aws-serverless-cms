@@ -13,6 +13,7 @@ import botocore
 import os
 import json
 import sys
+import setupConfig
 
 
 class CmsUtils:
@@ -30,32 +31,48 @@ class CmsUtils:
         return regions
 
     def createBucket(self, bucketname, templateBody):
+        if self.constants.has_key('TemplateBucket') \
+            and self.constants['TemplateBucket'] != None:
+            print 'TemplateBucket exists, bucket name = ', \
+                self.constants['TemplateBucket']
+            return
         stackName = bucketname + '-Stack'
         try:
             client = boto3.client('cloudformation')
 
+            # #TODO check if stack exists then skip otherwise create
+
             response = client.create_stack(StackName=stackName,
                     TemplateBody=templateBody)
             print 'stack created'
-            print response
-
-#            waiters = client.waiter_names
-#            print waiters
 
             waiter = client.get_waiter('stack_create_complete')
             waiter.wait(StackName=stackName)
 
             response = client.describe_stacks(StackName=stackName)
-            print 'describe stack'
-            print response
+            if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                outputs = response['Stacks'][0]['Outputs']
+                for output in outputs:
+                    if output['OutputKey'] == 'TemplateBucket':
+                        self.constants['TemplateBucket'] = \
+                            output['OutputValue']
+                        setupConfig.saveConfig(self.constants)
+                        print 'TemplateBucket', \
+                            self.constants['TemplateBucket']
         except botocore.exceptions.ClientError, e:
 
             print e
             sys.exit()
 
-    def uploadFolder(self, bucketname, fileDir):
-        print bucketname, fileDir
-        bucket = boto3.resource('s3').Bucket(bucketname)
+    def uploadFolder(
+        self,
+        bucketname,
+        fileDir,
+        acl='private',
+        ):
+
+        print 'uploading folder ', fileDir, 'to bucket ', bucketname
+        s3 = boto3.resource('s3')
         files = []
 
         for (dirpath, dirnames, filenames) in os.walk(fileDir):
@@ -66,20 +83,9 @@ class CmsUtils:
 
         for file in files:
             with open(file, 'r') as data:
-                key = file[len(file) - len(fileDir):len(file)]
+                key = file[len(fileDir):len(file)]
                 print file, key
+                s3.meta.client.upload_file(file, bucketname, key)
+        print fileDir, 'upload completed'
 
-                bucket.put_object(ACL='public-read', Body=data,
-                                  StorageClass='STANDARD', Key=key)
-
-    def uploadWebsite(self, prefix):
-        self.uploadFolder(self.constants['static_website_bucket'],
-                          prefix)
-
-
-#    def uploadCfnTemplate(self, prefix):
-#        self.uploadFolder(self.constants['template_bucket'], prefix)
-#
-#    def uploadLambda(self, prefix):
-#        self.uploadFolder(self.constants['lambda_bucket'], prefix)
 

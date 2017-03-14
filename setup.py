@@ -6,6 +6,7 @@
 # Author: Christopher Treadgold
 # Date: N/D
 # Edited: 07/08/2016 | Christopher Treadgold
+# Edited: 14/03/2017 | Gabriel Wu
 """
 
 import sys
@@ -30,6 +31,9 @@ util = cms_utils.CmsUtils(config)
 with open('cfnTemplate/init-template-bucket.yaml', 'r') as templateBody:
     templateBody = templateBody.read()
     util.createBucket(config['template_bucket'], templateBody)
+
+util.uploadFolder(util.constants['TemplateBucket'], '.' + os.sep
+                  + 'cfnTemplate' + os.sep)
 
 # util.createBucket(config['lambda_bucket'],
 #                  'cfnTemplate/init-template-bucket.yaml')
